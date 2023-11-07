@@ -6,6 +6,17 @@ class ExpenseList extends StatelessWidget {
 
   const ExpenseList({super.key, required this.expenseData});
 
+  Widget getHeading(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 20,
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,23 +30,38 @@ class ExpenseList extends StatelessWidget {
   }
 
   Widget expenseItem(ExpenseData data) {
-    return SizedBox(
-      child: Card(
-          color: Colors.yellow,
-          shadowColor: Colors.black,
-          elevation: 30,
+    return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Card(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Column(
               children: [
-                Text(data.id),
-                Text(data.title),
-                Text("Rs ${data.amount.toStringAsFixed(2)}"),
-                Text("${data.date}"),
-                Text("${data.category}")
+                Text(
+                  data.title,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Rs ${data.amount.toStringAsFixed(2)} ",
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        Icon(catergoryIcons[data.category]),
+                        const SizedBox(width: 8),
+                        Text(data.formatedDate),
+                      ],
+                    )
+                  ],
+                ),
               ],
             ),
-          )),
-    );
+          ),
+        ));
   }
 }
