@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense_data.dart';
 
@@ -67,11 +65,13 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      height: 700,
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           TextField(
+            style: Theme.of(context).textTheme.titleMedium,
             controller: title,
             maxLength: 50,
             decoration: const InputDecoration(label: Text("title")),
@@ -80,6 +80,7 @@ class _NewExpenseState extends State<NewExpense> {
             children: [
               Expanded(
                 child: TextField(
+                  style: Theme.of(context).textTheme.titleMedium,
                   controller: amount,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
@@ -91,9 +92,12 @@ class _NewExpenseState extends State<NewExpense> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(selectedDate == null
-                      ? "select date"
-                      : formatter.format(selectedDate!)),
+                  Text(
+                    selectedDate == null
+                        ? "select date"
+                        : formatter.format(selectedDate!),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   IconButton(
                       onPressed: _showDatePicker,
                       icon: const Icon(Icons.calendar_month))
@@ -106,19 +110,23 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           Row(
             children: [
-              DropdownButton(
-                  value: _selectedCategory,
-                  items: Category.values
-                      .map((category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category.name.toUpperCase())))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value == null) return;
-                    setState(() {
-                      _selectedCategory = value;
-                    });
-                  }),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButton(
+                    style: Theme.of(context).textTheme.titleMedium,
+                    value: _selectedCategory,
+                    items: Category.values
+                        .map((category) => DropdownMenuItem(
+                            value: category,
+                            child: Text(category.name.toUpperCase())))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    }),
+              ),
               const Spacer(),
               ElevatedButton(
                   onPressed: _submitExpenseData, child: const Text("Save")),
