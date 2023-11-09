@@ -1,11 +1,13 @@
 import 'package:expense_tracker/expenses.dart';
+import 'package:expense_tracker/models/expense_data.dart';
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/chart/bar_chart.dart';
 
 ColorScheme kColorScheme = ColorScheme.fromSeed(seedColor: Colors.black);
 ColorScheme kDarkColorScheme =
     ColorScheme.fromSeed(seedColor: Colors.black, brightness: Brightness.dark);
 
-void main() {
+/*void main() {
   runApp(MaterialApp(
     themeMode: ThemeMode.system,
     darkTheme: ThemeData.dark().copyWith(
@@ -83,5 +85,37 @@ void main() {
     debugShowCheckedModeBanner: false,
     title: "ExpenseTracker",
     home: const Expenses(),
+  ));
+}*/
+
+void main() {
+  runApp(MaterialApp(
+    home: ChartApp(data: [
+      ExpenseData(
+          title: "Food",
+          amount: 2000,
+          date: DateTime.now(),
+          category: Category.food),
+      ExpenseData(
+          title: "Kundapur",
+          amount: 2000,
+          date: DateTime.now(),
+          category: Category.travel),
+      ExpenseData(
+          title: "Movie",
+          amount: 2000,
+          date: DateTime.now(),
+          category: Category.leisure),
+      ExpenseData(
+          title: "Omlete",
+          amount: 20,
+          date: DateTime.now(),
+          category: Category.food),
+      ExpenseData(
+          title: "fruit",
+          amount: 200,
+          date: DateTime.now(),
+          category: Category.food),
+    ]),
   ));
 }

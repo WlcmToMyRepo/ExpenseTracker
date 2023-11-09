@@ -63,7 +63,10 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = const Center(child: Text("No expenses found"));
+    Widget content = Center(
+      child: Text("No expenses found",
+          style: Theme.of(context).textTheme.titleLarge),
+    );
     if (expenseData.isNotEmpty) {
       content = ExpenseList(
         expenseData: expenseData,
@@ -78,12 +81,13 @@ class _ExpensesState extends State<Expenses> {
               onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: [/*const Text("The Chart"), */ content],
-        ),
+      body: Container(
+        height: 800,
+        child: content,
+        // child: Column(
+        //   mainAxisAlignment: MainAxisAlignment.start,
+        //   mainAxisSize: MainAxisSize.max,
+        //   children: [/*const Text("The Chart"), */ content]
       ),
     );
   }
