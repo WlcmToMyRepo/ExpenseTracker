@@ -1,4 +1,5 @@
 import 'package:expense_tracker/expenses.dart';
+import 'package:expense_tracker/models/chart_data.dart';
 import 'package:expense_tracker/models/expense_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -10,39 +11,128 @@ class ChartApp extends StatelessWidget {
   double get totalExpense =>
       data.map((e) => e.amount).reduce((value, element) => value + element);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
+  List<ChartData> get barData {
+    return Category.values
+        .map((e) => ChartData.filterCategory(data, e))
+        .toList();
+  }
+
+  List<BarChartGroupData> get barGroups {
+    final items = barData;
+    List<BarChartGroupData> list = [];
+    for (var i = 0; i < items.length; i++) {
+      list.add(BarChartGroupData(x: i, barRods: [
+        BarChartRodData(
+            toY: items[i].getAmount,
+            width: 50,
+            color: const Color.fromARGB(133, 31, 12, 27),
+            /*gradient: const LinearGradient(
               colors: [
-                Colors.purple,
-                Colors.blue,
+                Color.fromARGB(0, 34, 2, 12),
+                Color.fromARGB(0, 32, 3, 12),
               ],
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
-            ),
+            ),*/
+            borderRadius: const BorderRadius.vertical(
+                bottom: Radius.zero, top: Radius.circular(5))),
+      ]));
+    }
+    return list;
+  }
+
+  Widget getTitles(double value, TitleMeta meta) {
+    var icon;
+    switch (value.toInt()) {
+      case 0:
+        icon = catergoryIcons[Category.food];
+        break;
+      case 1:
+        icon = catergoryIcons[Category.leisure];
+        break;
+      case 2:
+        icon = catergoryIcons[Category.travel];
+      case 3:
+        icon = catergoryIcons[Category.work];
+        break;
+      default:
+        icon = '';
+        break;
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: Icon(
+        icon,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  FlTitlesData get titlesData => FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 50,
+            getTitlesWidget: getTitles,
           ),
-          height: 500,
-          width: double.infinity,
+        ),
+        leftTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    // dynamic x = barData;
+    // print("THIS WILL DISPLAY $x");
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(50),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onSecondary,
+            // borderRadius: const BorderRadius.all(Radius.circular(50)),
+            /*gradient: LinearGradient(
+                colors: [
+                  Colors.white,
+                  Colors.white70,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),*/
+          ),
           child: BarChart(
             BarChartData(
-                titlesData: const FlTitlesData(show: false),
-                gridData: const FlGridData(show: false),
-                maxY: totalExpense,
-                barGroups: [
-                  BarChartGroupData(
-                    x: totalExpense.toInt(),
-                    barsSpace: 5,
-                    barRods: data
-                        .map((items) => BarChartRodData(
-                              toY: items.amount,
-                            ))
-                        .toList(),
-                  ),
-                ]),
+              borderData: FlBorderData(show: false),
+              titlesData: titlesData,
+              gridData: const FlGridData(
+                show: false,
+                drawHorizontalLine: false,
+              ),
+              maxY: totalExpense,
+              alignment: BarChartAlignment.spaceBetween,
+              barGroups: barGroups,
+
+              /*barData
+                    .map(
+                      (bar) => BarChartGroupData(x: , barsSpace: 5, barRods: [
+                        BarChartRodData(
+                          width: 50,
+                          toY: bar.getAmount,
+                          color: Colors.black,
+                        ),
+                      ]),
+                    )
+                    .toList(),*/
+            ),
           ),
         ),
       ),

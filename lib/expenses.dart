@@ -1,3 +1,4 @@
+import 'package:expense_tracker/chart/bar_chart.dart';
 import 'package:expense_tracker/expense_list.dart';
 import 'package:expense_tracker/new_expense.dart';
 import 'package:flutter/material.dart';
@@ -81,14 +82,16 @@ class _ExpensesState extends State<Expenses> {
               onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
         ],
       ),
-      body: Container(
-        height: 800,
-        child: content,
-        // child: Column(
-        //   mainAxisAlignment: MainAxisAlignment.start,
-        //   mainAxisSize: MainAxisSize.max,
-        //   children: [/*const Text("The Chart"), */ content]
+      body: Column(
+        children: [
+          Expanded(child: ChartApp(data: expenseData)),
+          Expanded(child: content),
+        ],
       ),
+      // child: Column(
+      //   mainAxisAlignment: MainAxisAlignment.start,
+      //   mainAxisSize: MainAxisSize.max,
+      //   children: [/*const Text("The Chart"), */ content]
     );
   }
 }

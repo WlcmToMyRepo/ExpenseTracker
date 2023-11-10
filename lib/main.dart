@@ -1,27 +1,25 @@
 import 'package:expense_tracker/expenses.dart';
-import 'package:expense_tracker/models/expense_data.dart';
 import 'package:flutter/material.dart';
-import 'package:expense_tracker/chart/bar_chart.dart';
 
-ColorScheme kColorScheme = ColorScheme.fromSeed(seedColor: Colors.black);
+ColorScheme kColorScheme = ColorScheme.fromSeed(seedColor: Colors.black12);
 ColorScheme kDarkColorScheme =
     ColorScheme.fromSeed(seedColor: Colors.black, brightness: Brightness.dark);
 
-/*void main() {
+void main() {
   runApp(MaterialApp(
     themeMode: ThemeMode.system,
     darkTheme: ThemeData.dark().copyWith(
       useMaterial3: true,
       colorScheme: kDarkColorScheme,
       listTileTheme: const ListTileThemeData().copyWith(
-          textColor: kDarkColorScheme.onSecondary,
-          tileColor: kDarkColorScheme.onSecondaryContainer,
-          iconColor: kDarkColorScheme.onSecondary,
+          textColor: kDarkColorScheme.primary,
+          tileColor: kDarkColorScheme.onSecondary,
+          iconColor: kDarkColorScheme.primary,
           subtitleTextStyle:
               TextStyle(color: kDarkColorScheme.onSecondary.withOpacity(.6))),
       textTheme: ThemeData().textTheme.copyWith(
             titleSmall: TextStyle(
-              color: kDarkColorScheme.onSecondary,
+              color: kDarkColorScheme.primary,
               fontWeight: FontWeight.normal,
               fontSize: 12,
             ),
@@ -85,37 +83,5 @@ ColorScheme kDarkColorScheme =
     debugShowCheckedModeBanner: false,
     title: "ExpenseTracker",
     home: const Expenses(),
-  ));
-}*/
-
-void main() {
-  runApp(MaterialApp(
-    home: ChartApp(data: [
-      ExpenseData(
-          title: "Food",
-          amount: 2000,
-          date: DateTime.now(),
-          category: Category.food),
-      ExpenseData(
-          title: "Kundapur",
-          amount: 2000,
-          date: DateTime.now(),
-          category: Category.travel),
-      ExpenseData(
-          title: "Movie",
-          amount: 2000,
-          date: DateTime.now(),
-          category: Category.leisure),
-      ExpenseData(
-          title: "Omlete",
-          amount: 20,
-          date: DateTime.now(),
-          category: Category.food),
-      ExpenseData(
-          title: "fruit",
-          amount: 200,
-          date: DateTime.now(),
-          category: Category.food),
-    ]),
   ));
 }
