@@ -48,10 +48,10 @@ class ChartApp extends StatelessWidget {
         icon = catergoryIcons[Category.food];
         break;
       case 1:
-        icon = catergoryIcons[Category.leisure];
+        icon = catergoryIcons[Category.travel];
         break;
       case 2:
-        icon = catergoryIcons[Category.travel];
+        icon = catergoryIcons[Category.leisure];
       case 3:
         icon = catergoryIcons[Category.work];
         break;

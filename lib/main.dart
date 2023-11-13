@@ -16,7 +16,7 @@ void main() {
           tileColor: kDarkColorScheme.onSecondary,
           iconColor: kDarkColorScheme.primary,
           subtitleTextStyle:
-              TextStyle(color: kDarkColorScheme.onSecondary.withOpacity(.6))),
+              TextStyle(color: kDarkColorScheme.primary.withOpacity(.6))),
       textTheme: ThemeData().textTheme.copyWith(
             titleSmall: TextStyle(
               color: kDarkColorScheme.primary,
