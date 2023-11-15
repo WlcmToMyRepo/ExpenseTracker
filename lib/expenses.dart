@@ -13,18 +13,7 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  final List<ExpenseData> expenseData = [
-    ExpenseData(
-        title: "Food",
-        amount: 1000,
-        date: DateTime.now(),
-        category: Category.food),
-    ExpenseData(
-        title: "Movie",
-        amount: 200,
-        date: DateTime.now(),
-        category: Category.leisure),
-  ];
+  final List<ExpenseData> expenseData = [];
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
@@ -83,8 +72,9 @@ class _ExpensesState extends State<Expenses> {
         ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(child: ChartApp(data: expenseData)),
+          BarChart(data: expenseData),
           const Divider(),
           Expanded(child: content),
         ],

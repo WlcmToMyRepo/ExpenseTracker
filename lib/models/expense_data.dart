@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -37,5 +36,24 @@ class ExpenseData {
 
   String get formatedDate {
     return formatter.format(date);
+  }
+}
+
+class ExpenseBucket {
+  final Category? category;
+  final List<ExpenseData> expenses;
+
+  ExpenseBucket({this.category, required this.expenses});
+
+  ExpenseBucket.getExpenseFromCategory(this.category, List<ExpenseData> data)
+      : expenses =
+            data.where((expense) => expense.category == category).toList();
+
+  double get totalExpense {
+    double sum = 0;
+    for (final exp in expenses) {
+      sum += exp.amount;
+    }
+    return sum;
   }
 }

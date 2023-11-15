@@ -1,140 +1,88 @@
-import 'package:expense_tracker/expenses.dart';
-import 'package:expense_tracker/models/chart_data.dart';
+import 'dart:math';
+
+import 'package:expense_tracker/chart/bar.dart';
 import 'package:expense_tracker/models/expense_data.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class ChartApp extends StatelessWidget {
+class BarChart extends StatelessWidget {
   final List<ExpenseData> data;
-  const ChartApp({super.key, required this.data});
+  const BarChart({super.key, required this.data});
 
-  double get totalExpense =>
-      data.map((e) => e.amount).reduce((value, element) => value + element);
+  double getBarValue(max, amount) {
+    double value = amount / max;
+    if (value.isNaN) return 0;
+    return value;
+  }
 
-  List<ChartData> get barData {
+  double get maxAmount {
+    return ExpenseBucket(expenses: data).totalExpense;
+  }
+
+  List<ExpenseBucket> get buckets {
     return Category.values
-        .map((e) => ChartData.filterCategory(data, e))
+        .map((cat) => ExpenseBucket.getExpenseFromCategory(cat, data))
         .toList();
   }
 
-  List<BarChartGroupData> get barGroups {
-    final items = barData;
-    List<BarChartGroupData> list = [];
-    for (var i = 0; i < items.length; i++) {
-      list.add(BarChartGroupData(x: i, barRods: [
-        BarChartRodData(
-            toY: items[i].getAmount,
-            width: 50,
-            color: const Color.fromARGB(133, 31, 12, 27),
-            /*gradient: const LinearGradient(
-              colors: [
-                Color.fromARGB(0, 34, 2, 12),
-                Color.fromARGB(0, 32, 3, 12),
-              ],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-            ),*/
-            borderRadius: const BorderRadius.vertical(
-                bottom: Radius.zero, top: Radius.circular(5))),
-      ]));
-    }
-    return list;
-  }
-
-  Widget getTitles(double value, TitleMeta meta) {
-    var icon;
-    switch (value.toInt()) {
-      case 0:
-        icon = catergoryIcons[Category.food];
-        break;
-      case 1:
-        icon = catergoryIcons[Category.travel];
-        break;
-      case 2:
-        icon = catergoryIcons[Category.leisure];
-      case 3:
-        icon = catergoryIcons[Category.work];
-        break;
-      default:
-        icon = '';
-        break;
-    }
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      space: 4,
-      child: Icon(
-        icon,
-        color: Colors.black,
-      ),
+  Widget getText(BuildContext context, String text) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.titleSmall,
     );
   }
 
-  FlTitlesData get titlesData => FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 50,
-            getTitlesWidget: getTitles,
-          ),
-        ),
-        leftTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      );
+  Widget getIcon(BuildContext context, iconData) {
+    return Icon(
+      iconData,
+      color: Theme.of(context).colorScheme.onPrimaryContainer,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    // dynamic x = barData;
-    // print("THIS WILL DISPLAY $x");
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(50),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onSecondary,
-            // borderRadius: const BorderRadius.all(Radius.circular(50)),
-            /*gradient: LinearGradient(
-                colors: [
-                  Colors.white,
-                  Colors.white70,
-                ],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-              ),*/
-          ),
-          child: BarChart(
-            BarChartData(
-              borderData: FlBorderData(show: false),
-              titlesData: titlesData,
-              gridData: const FlGridData(
-                show: false,
-                drawHorizontalLine: false,
-              ),
-              maxY: totalExpense,
-              alignment: BarChartAlignment.spaceBetween,
-              barGroups: barGroups,
-
-              /*barData
-                    .map(
-                      (bar) => BarChartGroupData(x: , barsSpace: 5, barRods: [
-                        BarChartRodData(
-                          width: 50,
-                          toY: bar.getAmount,
-                          color: Colors.black,
-                        ),
-                      ]),
-                    )
-                    .toList(),*/
+    double maxexp = maxAmount;
+    return Container(
+      padding: const EdgeInsets.only(bottom: 20),
+      height: 180,
+      // decoration:
+      //     BoxDecoration(border: Border.all(width: 2, color: Colors.red)),
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: buckets
+                  .map((e) => Bar(data: getBarValue(maxexp, e.totalExpense)))
+                  .toList(),
             ),
           ),
-        ),
+          Expanded(
+            flex: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                getIcon(context, catergoryIcons[Category.food]),
+                getIcon(context, catergoryIcons[Category.travel]),
+                getIcon(context, catergoryIcons[Category.leisure]),
+                getIcon(context, catergoryIcons[Category.work]),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: buckets
+                  .map((bucket) =>
+                      getText(context, bucket.totalExpense.toString()))
+                  .toList(),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -9,14 +9,4 @@ class ChartData {
   ChartData.filterCategory(List<ExpenseData> expenses, this.category)
       : data =
             expenses.where((element) => element.category == category).toList();
-
-  double get getAmount {
-    try {
-      return data
-          .map((e) => e.amount)
-          .reduce((amount, total) => total + amount);
-    } catch (e) {
-      return 0;
-    }
-  }
 }
