@@ -21,8 +21,10 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("EXPANSE DATA $expenseData");
     return Container(
         child: ListView.builder(
+      shrinkWrap: true,
       itemCount: expenseData.length,
       itemBuilder: (context, index) => Dismissible(
         background: Container(color: Theme.of(context).colorScheme.error),

@@ -53,6 +53,10 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    print(MediaQuery.of(context).size.width);
+    print(MediaQuery.of(context).size.height);
+
     Widget content = Center(
       child: Text("No expenses found",
           style: Theme.of(context).textTheme.titleLarge),
@@ -71,18 +75,27 @@ class _ExpensesState extends State<Expenses> {
               onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          BarChart(data: expenseData),
-          const Divider(),
-          Expanded(child: content),
-        ],
-      ),
-      // child: Column(
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   mainAxisSize: MainAxisSize.max,
-      //   children: [/*const Text("The Chart"), */ content]
+      body: (width < 600)
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                BarChart(data: expenseData),
+                const Divider(),
+                Expanded(child: content),
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(child: BarChart(data: expenseData)),
+                const VerticalDivider(),
+                Expanded(child: content),
+              ],
+              // child: Column(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   mainAxisSize: MainAxisSize.max,
+              //   children: [/*const Text("The Chart"), */ content]
+            ),
     );
   }
 }
