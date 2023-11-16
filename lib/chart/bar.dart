@@ -1,4 +1,3 @@
-import 'package:expense_tracker/models/expense_data.dart';
 import 'package:flutter/material.dart';
 
 class Bar extends StatelessWidget {

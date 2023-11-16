@@ -63,6 +63,10 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    print(MediaQuery.of(context).size.width);
+    print(MediaQuery.of(context).size.height);
+
     Widget content = Center(
       child: Text("No expenses found",
           style: Theme.of(context).textTheme.titleLarge),
@@ -82,38 +86,61 @@ class _ExpensesState extends State<Expenses> {
         ],
       ),
       //fetch data from databse with future builder
-      body: FutureBuilder(
-          future: getData(widget.database!, 'expense'),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else {
-              expenseData = snapshot.data!
-                  .map((e) => ExpenseData.fromMap(map: e))
-                  .toList();
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  BarChart(data: expenseData),
-                  const Divider(),
-                  Expanded(
-                    child: expenseData.isEmpty
-                        ? Text("No expenses found",
-                            style: Theme.of(context).textTheme.titleLarge)
-                        : ExpenseList(
-                            expenseData: expenseData,
-                            removeExpense: _removeExpense,
-                          ),
-                  ),
-                ],
-              );
-            }
-          }),
-
       // child: Column(
       //   mainAxisAlignment: MainAxisAlignment.start,
       //   mainAxisSize: MainAxisSize.max,
       //   children: [/*const Text("The Chart"), */ content]
+      body: (width < 600)
+          ? FutureBuilder(
+              future: getData(widget.database!, 'expense'),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else {
+                  expenseData = snapshot.data!
+                      .map((e) => ExpenseData.fromMap(map: e))
+                      .toList();
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      BarChart(data: expenseData),
+                      const Divider(),
+                      Expanded(
+                        child: expenseData.isEmpty
+                            ? Text("No expenses found",
+                                style: Theme.of(context).textTheme.titleLarge)
+                            : ExpenseList(
+                                expenseData: expenseData,
+                                removeExpense: _removeExpense,
+                              ),
+                      ),
+                    ],
+                  );
+                }
+              })
+          : FutureBuilder(
+              future: getData(widget.database!, 'expense'),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else {
+                  expenseData = snapshot.data!
+                      .map((e) => ExpenseData.fromMap(map: e))
+                      .toList();
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(child: BarChart(data: expenseData)),
+                      const VerticalDivider(),
+                      Expanded(child: content),
+                    ],
+                    // child: Column(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   mainAxisSize: MainAxisSize.max,
+                    //   children: [/*const Text("The Chart"), */ content]
+                  );
+                }
+              }),
     );
   }
 }
