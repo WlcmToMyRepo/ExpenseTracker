@@ -13,6 +13,14 @@ enum Category {
   work
 } // enums are special type of custom data holder we are using here for defining custom category
 
+Category? getEnum(String text) {
+  for (var cat in Category.values) {
+    if (cat.toString() == text) {
+      return cat;
+    }
+  }
+}
+
 Map<Category, dynamic> catergoryIcons = {
   Category.food: Icons.lunch_dining,
   Category.travel: Icons.flight_takeoff,
@@ -21,11 +29,11 @@ Map<Category, dynamic> catergoryIcons = {
 };
 
 class ExpenseData {
-  final String id;
-  final String title;
-  final double amount;
-  final DateTime date;
-  final Category category;
+  String id;
+  String title;
+  double amount;
+  DateTime date;
+  Category category;
 
   ExpenseData(
       {required this.title,
@@ -34,8 +42,25 @@ class ExpenseData {
       required this.category})
       : id = uuid.v4(); //uuid.v4 method generates an uniq id
 
+  ExpenseData.fromMap({required map})
+      : id = map['id'],
+        title = map['title'],
+        amount = map['amount'],
+        date = DateFormat('MM/dd/yyyy').parse(map['date']),
+        category = getEnum(map['category'])!;
+
   String get formatedDate {
     return formatter.format(date);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id.toString(),
+      'title': title,
+      'amount': amount,
+      'date': formatedDate.toString(),
+      'category': category.toString(),
+    };
   }
 }
 

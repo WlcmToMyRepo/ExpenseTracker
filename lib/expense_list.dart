@@ -22,7 +22,7 @@ class ExpenseList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("EXPANSE DATA $expenseData");
-    return Container(
+    return SingleChildScrollView(
         child: ListView.builder(
       shrinkWrap: true,
       itemCount: expenseData.length,

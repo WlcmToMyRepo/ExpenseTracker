@@ -1,11 +1,18 @@
 import 'package:expense_tracker/expenses.dart';
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/database/db_service.dart';
+import 'package:sqflite/sqflite.dart';
 
 ColorScheme kColorScheme = ColorScheme.fromSeed(seedColor: Colors.black12);
 ColorScheme kDarkColorScheme =
     ColorScheme.fromSeed(seedColor: Colors.black, brightness: Brightness.dark);
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //create databse
+  final Database db = await createDB('expense.db');
+  createTable(db, 'expense');
+  List<Map<String, dynamic>> raw_data = await getData(db, 'expense');
   runApp(MaterialApp(
     themeMode: ThemeMode.system,
     darkTheme: ThemeData.dark().copyWith(
@@ -82,6 +89,9 @@ void main() {
     ),
     debugShowCheckedModeBanner: false,
     title: "ExpenseTracker",
-    home: const Expenses(),
+    home: Expenses(
+      database: db,
+      rawData: raw_data,
+    ),
   ));
 }
