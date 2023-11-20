@@ -24,7 +24,6 @@ class ExpenseList extends StatelessWidget {
     print("EXPANSE DATA $expenseData");
     return SingleChildScrollView(
         child: ListView.builder(
-      shrinkWrap: true,
       itemCount: expenseData.length,
       itemBuilder: (context, index) => Dismissible(
         background: Container(color: Theme.of(context).colorScheme.error),

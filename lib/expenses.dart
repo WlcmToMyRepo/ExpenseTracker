@@ -63,6 +63,16 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    Widget content = Center(
+      child: Text("No expenses found",
+          style: Theme.of(context).textTheme.titleLarge),
+    );
+    if (expenseData.isNotEmpty) {
+      content = ExpenseList(
+        expenseData: expenseData,
+        removeExpense: _removeExpense,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Xpense"),
@@ -99,6 +109,7 @@ class _ExpensesState extends State<Expenses> {
               );
             }
           }),
+
       // child: Column(
       //   mainAxisAlignment: MainAxisAlignment.start,
       //   mainAxisSize: MainAxisSize.max,

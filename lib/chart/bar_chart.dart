@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:expense_tracker/chart/bar.dart';
 import 'package:expense_tracker/models/expense_data.dart';
 import 'package:flutter/material.dart';
