@@ -19,10 +19,6 @@ class Expenses extends StatefulWidget {
 class _ExpensesState extends State<Expenses> {
   List<ExpenseData> expenseData = [];
 
-  void get clearExpense {
-    expenseData = [];
-  }
-
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -39,7 +35,6 @@ class _ExpensesState extends State<Expenses> {
     insertData(widget.database!, 'expense', data.toMap());
     setState(() {
       expenseData.add(data);
-      clearExpense;
     });
   }
 
@@ -49,7 +44,6 @@ class _ExpensesState extends State<Expenses> {
 
     setState(() {
       expenseData.remove(exp);
-      clearExpense;
     });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -61,7 +55,6 @@ class _ExpensesState extends State<Expenses> {
           insertData(widget.database!, 'expense', exp.toMap());
           setState(() {
             expenseData.insert(expenseIndex, exp);
-            clearExpense;
           });
         },
       ),
@@ -70,20 +63,6 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
-    clearExpense;
-    for (var map in widget.rawData) {
-      expenseData.add(ExpenseData.fromMap(map: map));
-    }
-    Widget content = Center(
-      child: Text("No expenses found",
-          style: Theme.of(context).textTheme.titleLarge),
-    );
-    if (expenseData.isNotEmpty) {
-      content = ExpenseList(
-        expenseData: expenseData,
-        removeExpense: _removeExpense,
-      );
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Xpense"),
@@ -92,14 +71,34 @@ class _ExpensesState extends State<Expenses> {
               onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          BarChart(data: expenseData),
-          const Divider(),
-          Expanded(child: content),
-        ],
-      ),
+      //fetch data from databse with future builder
+      body: FutureBuilder(
+          future: getData(widget.database!, 'expense'),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else {
+              expenseData = snapshot.data!
+                  .map((e) => ExpenseData.fromMap(map: e))
+                  .toList();
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  BarChart(data: expenseData),
+                  const Divider(),
+                  Expanded(
+                    child: expenseData.isEmpty
+                        ? Text("No expenses found",
+                            style: Theme.of(context).textTheme.titleLarge)
+                        : ExpenseList(
+                            expenseData: expenseData,
+                            removeExpense: _removeExpense,
+                          ),
+                  ),
+                ],
+              );
+            }
+          }),
       // child: Column(
       //   mainAxisAlignment: MainAxisAlignment.start,
       //   mainAxisSize: MainAxisSize.max,
