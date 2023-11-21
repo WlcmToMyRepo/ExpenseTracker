@@ -13,13 +13,12 @@ enum Category {
   work
 } // enums are special type of custom data holder we are using here for defining custom category
 
-Category getEnum(String text) {
+Category? getEnum(String text) {
   for (var cat in Category.values) {
     if (cat.toString() == text) {
       return cat;
     }
   }
-  return Category.leisure;
 }
 
 Map<Category, dynamic> catergoryIcons = {
@@ -48,7 +47,7 @@ class ExpenseData {
         title = map['title'],
         amount = map['amount'],
         date = DateFormat('MM/dd/yyyy').parse(map['date']),
-        category = getEnum(map['category']);
+        category = getEnum(map['category'])!;
 
   String get formatedDate {
     return formatter.format(date);

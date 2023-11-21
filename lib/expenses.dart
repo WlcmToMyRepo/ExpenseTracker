@@ -8,7 +8,8 @@ import 'package:sqflite/sqflite.dart';
 
 class Expenses extends StatefulWidget {
   final Database? database;
-  const Expenses({super.key, required this.database});
+  final List<Map<String, dynamic>> rawData;
+  const Expenses({super.key, required this.database, required this.rawData});
   @override
   State<Expenses> createState() {
     return _ExpensesState();

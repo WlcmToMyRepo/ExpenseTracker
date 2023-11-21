@@ -11,11 +11,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //create databse
   final Database db = await createDB('expense.db');
-  await createTable(db, 'expense');
-
+  createTable(db, 'expense');
+  List<Map<String, dynamic>> raw_data = await getData(db, 'expense');
   runApp(MaterialApp(
     themeMode: ThemeMode.system,
     darkTheme: ThemeData.dark().copyWith(
+      useMaterial3: true,
       colorScheme: kDarkColorScheme,
       listTileTheme: const ListTileThemeData().copyWith(
           textColor: kDarkColorScheme.primary,
@@ -46,6 +47,7 @@ void main() async {
       ),
     ),
     theme: ThemeData().copyWith(
+      useMaterial3: true,
       colorScheme: kColorScheme,
       //styling card theme
       cardTheme: const CardTheme().copyWith(
@@ -89,6 +91,7 @@ void main() async {
     title: "ExpenseTracker",
     home: Expenses(
       database: db,
+      rawData: raw_data,
     ),
   ));
 }
