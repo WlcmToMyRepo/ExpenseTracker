@@ -8,8 +8,7 @@ import 'package:sqflite/sqflite.dart';
 
 class Expenses extends StatefulWidget {
   final Database? database;
-  final List<Map<String, dynamic>> rawData;
-  const Expenses({super.key, required this.database, required this.rawData});
+  const Expenses({super.key, required this.database});
   @override
   State<Expenses> createState() {
     return _ExpensesState();
@@ -64,8 +63,6 @@ class _ExpensesState extends State<Expenses> {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    print(MediaQuery.of(context).size.width);
-    print(MediaQuery.of(context).size.height);
 
     Widget content = Center(
       child: Text("No expenses found",
