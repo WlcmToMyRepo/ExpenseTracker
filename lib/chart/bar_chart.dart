@@ -43,6 +43,7 @@ class BarChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(bottom: 20),
       height: 180,
+      color: Theme.of(context).colorScheme.onSecondary,
       // decoration:
       //     BoxDecoration(border: Border.all(width: 2, color: Colors.red)),
       width: double.infinity,

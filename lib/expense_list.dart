@@ -21,21 +21,21 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("EXPANSE DATA $expenseData");
-    return SingleChildScrollView(
-        child: ListView.builder(
-      shrinkWrap: true,
-      itemCount: expenseData.length,
-      itemBuilder: (context, index) => Dismissible(
-        background: Container(color: Theme.of(context).colorScheme.error),
-        key: ValueKey(expenseData[index]),
-        direction: DismissDirection.startToEnd,
-        onDismissed: (direction) {
-          removeExpense(expenseData[index]);
-        },
-        child: expenseItem2(expenseData[index], context),
+    return Container(
+      padding: EdgeInsets.zero,
+      child: ListView.builder(
+        itemCount: expenseData.length,
+        itemBuilder: (context, index) => Dismissible(
+          background: Container(color: Theme.of(context).colorScheme.error),
+          key: ValueKey(expenseData[index]),
+          direction: DismissDirection.startToEnd,
+          onDismissed: (direction) {
+            removeExpense(expenseData[index]);
+          },
+          child: expenseItem2(expenseData[index], context),
+        ),
       ),
-    ));
+    );
   }
 
   Widget expenseItem2(ExpenseData data, BuildContext context) {
