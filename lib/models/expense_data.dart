@@ -19,6 +19,7 @@ Category? getEnum(String text) {
       return cat;
     }
   }
+  return Category.leisure;
 }
 
 Map<Category, dynamic> catergoryIcons = {
